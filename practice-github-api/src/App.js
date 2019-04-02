@@ -1,17 +1,23 @@
 import React, { useState, useEffect } from "react";
 
 export default function App() {
-  const { log: l } = console;
+  const { log: l, table: t } = console;
 
   const [repositories, setRepositories] = useState([]);
 
-  async function getRepos(user) {
+  async function getRepos(fetch, user) {
+    l(fetch);
+    if (!fetch) return;
     const response = await fetch(`https://api.github.com/users/${user}/repos`);
+    t(await response);
     return await response.json();
   }
 
   useEffect(() => {
-    getRepos("jaum97").then(response => setRepositories(response));
+    getRepos(window.fetch, "jaum97").then(response => {
+      t(response);
+      setRepositories(response);
+    });
   }, []);
 
   return (
